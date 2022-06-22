@@ -1,0 +1,38 @@
+|SkillCast.mac
+|Created by HooseNutz - 27 FEB 05
+|-Required plugins NONE
+|USE: /macro skillcast 8
+|Why I made this, instead of using MQ2Twist |to twist a spell-gem and chance getting |caught using MQ2. And to skill-up your |choice of spell types.
+
+#include MQ2Cast.inc
+#turbo 10
+   /Echo =============================
+   /Echo HooseNutz's Spell Caster
+   /Echo =============================
+
+Sub Main
+   /declare SpellName
+   /varset SpellName ${Me.Gem[${Param0}]}
+   /if (${Me.State.Equal[Sit]}) /stand
+
+   :CheckMana
+   /if (${Me.PctMana}<20) /goto :SitDown
+
+   :CheckCursor
+   /if (${Cursor.ID}) {
+      /autoinv
+      /goto :CheckCursor
+   }
+
+   :CastSpell
+   /call cast "${SpellName}"
+   /doevents
+   /goto :CheckMana
+
+   :SitDown
+   /if (${Me.State.Equal[STAND]}) /sit on
+
+   :HowMuchMana
+   /if (${Me.PctMana}<98) /goto :HowMuchMana
+   /goto :CheckMana
+/endmacro
